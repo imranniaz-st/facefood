@@ -8,7 +8,8 @@
 ///
 /// | Environment              | Example value                          |
 /// |--------------------------|----------------------------------------|
-/// | Android emulator         | `http://10.0.2.2:8000/api`             |
+/// | Production               | `https://app.facefood.cafe/api`        |
+/// | Android emulator (local) | `http://10.0.2.2:8000/api`             |
 /// | iOS simulator / desktop  | `http://127.0.0.1:8000/api`            |
 /// | Physical device (LAN)    | `http://192.168.x.x:8000/api`          |
 ///
@@ -20,10 +21,7 @@ library;
 
 class AppConfig {
   /// Single source of truth for the Laravel API base URL (include `/api`).
-  /// Currently set for **Android emulator** → host machine via `10.0.2.2`.
-  /// For Linux/Chrome/iOS simulator: `http://127.0.0.1:8000/api`
-  /// For a physical phone: `http://YOUR_LAN_IP:8000/api`
-  static const String apiBaseUrl = 'http://10.0.2.2:8000/api';
+  static const String apiBaseUrl = 'https://app.facefood.cafe/api';
 
   /// Resolved base URL: `--dart-define=API_BASE_URL=...` if set, else [apiBaseUrl].
   static String get resolvedApiBaseUrl {
