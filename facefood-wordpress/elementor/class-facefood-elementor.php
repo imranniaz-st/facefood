@@ -27,5 +27,6 @@ class Facefood_Elementor
         $widgets_manager->register(new Facefood_Widget_Deals());
         $widgets_manager->register(new Facefood_Widget_App_Button());
         $widgets_manager->register(new Facefood_Widget_Auth());
+        $widgets_manager->register(new Facefood_Widget_Auth_Popup());
     }
 }

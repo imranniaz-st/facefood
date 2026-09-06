@@ -49,6 +49,20 @@ After activation, find these widgets under the **Facefood** category in Elemento
 | Facefood Deals | Active deals carousel/grid |
 | Facefood App Download | Play Store / App Store buttons |
 | Facefood Login / Register | Shared Laravel account login & signup |
+| Facefood Sign Up Popup | Professional popup for guests (auto-show + floating button) |
+
+## Sign up popup (Elementor)
+
+Add widget **Facefood Sign Up Popup** to any page (e.g. homepage footer section).
+
+- Only shows when user is **not logged in**
+- **Sign up** and **Log in** tabs
+- Auto-opens after a few seconds (configurable)
+- Floating **Sign up** button bottom-right
+- Same Laravel account as the mobile app
+
+Shortcode: `[facefood_auth_popup]`  
+Optional: `[facefood_auth_popup auto_show="yes" delay="5" default_tab="signup"]`
 
 ## Shortcodes (login / register)
 

@@ -12,6 +12,73 @@
     $msg.toggleClass('is-success', !isError);
   }
 
+  function openPopup($popup) {
+    $popup.removeAttr('hidden').attr('aria-hidden', 'false').addClass('is-open');
+    $('body').addClass('facefood-popup-open');
+  }
+
+  function closePopup($popup) {
+    $popup.attr('hidden', true).attr('aria-hidden', 'true').removeClass('is-open');
+    $('body').removeClass('facefood-popup-open');
+  }
+
+  function initAuthPopups() {
+    $('.facefood-popup').each(function () {
+      var $popup = $(this);
+      var autoShow = $popup.data('auto-show') === 1 || $popup.data('auto-show') === '1';
+      var delay = parseInt($popup.data('delay'), 10) || 0;
+      var showOnce = $popup.data('show-once') === 1 || $popup.data('show-once') === '1';
+      var popupId = $popup.attr('id') || 'facefood-popup';
+      var storageKey = 'facefood_popup_seen_' + popupId;
+
+      if (showOnce && window.sessionStorage.getItem(storageKey) === '1') {
+        return;
+      }
+
+      if (autoShow) {
+        window.setTimeout(function () {
+          openPopup($popup);
+          if (showOnce) {
+            window.sessionStorage.setItem(storageKey, '1');
+          }
+        }, delay * 1000);
+      }
+    });
+  }
+
+  $(document).ready(initAuthPopups);
+
+  $(document).on('click', '.facefood-popup-trigger', function () {
+    var target = $(this).data('target');
+    var $popup = $('#' + target);
+    if ($popup.length) {
+      openPopup($popup);
+    }
+  });
+
+  $(document).on('click', '.facefood-popup__close, .facefood-popup__overlay', function () {
+    closePopup($(this).closest('.facefood-popup'));
+  });
+
+  $(document).on('keydown', function (event) {
+    if (event.key === 'Escape') {
+      $('.facefood-popup.is-open').each(function () {
+        closePopup($(this));
+      });
+    }
+  });
+
+  $(document).on('click', '.facefood-popup__tab', function () {
+    var $tab = $(this);
+    var tab = $tab.data('tab');
+    var $popup = $tab.closest('.facefood-popup');
+
+    $popup.find('.facefood-popup__tab').removeClass('is-active');
+    $popup.find('.facefood-popup__panel').removeClass('is-active');
+    $tab.addClass('is-active');
+    $popup.find('.facefood-popup__panel[data-panel="' + tab + '"]').addClass('is-active');
+  });
+
   $(document).on('click', '.facefood-tab', function () {
     var $tab = $(this);
     var target = $tab.data('target');

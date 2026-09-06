@@ -32,6 +32,7 @@ class Facefood_Autoloader
                 'Facefood_Widget_Deals' => '../elementor/widgets/class-facefood-widget-deals.php',
                 'Facefood_Widget_App_Button' => '../elementor/widgets/class-facefood-widget-app-button.php',
                 'Facefood_Widget_Auth' => '../elementor/widgets/class-facefood-widget-auth.php',
+                'Facefood_Widget_Auth_Popup' => '../elementor/widgets/class-facefood-widget-auth-popup.php',
             ];
 
             if (! isset($map[$class])) {

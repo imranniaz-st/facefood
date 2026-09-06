@@ -15,6 +15,7 @@ class Facefood_Auth
         add_shortcode('facefood_login', [$this, 'render_login_shortcode']);
         add_shortcode('facefood_register', [$this, 'render_register_shortcode']);
         add_shortcode('facefood_account', [$this, 'render_account_shortcode']);
+        add_shortcode('facefood_auth_popup', [$this, 'render_auth_popup_shortcode']);
 
         add_action('wp_ajax_facefood_login', [$this, 'ajax_login']);
         add_action('wp_ajax_nopriv_facefood_login', [$this, 'ajax_login']);
@@ -89,6 +90,56 @@ class Facefood_Auth
         }
 
         return $this->render_account_panel();
+    }
+
+    public function render_auth_popup_shortcode($atts = []): string
+    {
+        $atts = shortcode_atts([
+            'headline' => __('Join Facefood', 'facefood-integration'),
+            'subtitle' => __('Create an account to order faster, save favourites, and get exclusive deals.', 'facefood-integration'),
+            'default_tab' => 'signup',
+            'auto_show' => 'yes',
+            'delay' => '3',
+            'show_once' => 'yes',
+            'trigger' => 'yes',
+            'trigger_text' => __('Sign up', 'facefood-integration'),
+        ], $atts, 'facefood_auth_popup');
+
+        return $this->render_auth_popup([
+            'id' => 'facefood-auth-popup-shortcode',
+            'headline' => sanitize_text_field($atts['headline']),
+            'subtitle' => sanitize_text_field($atts['subtitle']),
+            'default_tab' => sanitize_key($atts['default_tab']),
+            'auto_show' => $atts['auto_show'] === 'yes',
+            'delay_seconds' => (int) $atts['delay'],
+            'show_once' => $atts['show_once'] === 'yes',
+            'show_trigger_button' => $atts['trigger'] === 'yes',
+            'trigger_text' => sanitize_text_field($atts['trigger_text']),
+        ]);
+    }
+
+    public function render_auth_popup(array $settings = []): string
+    {
+        if (is_user_logged_in()) {
+            return '';
+        }
+
+        $popup_settings = wp_parse_args($settings, [
+            'id' => 'facefood-auth-popup',
+            'headline' => __('Join Facefood', 'facefood-integration'),
+            'subtitle' => __('Create an account to order faster, save favourites, and get exclusive deals.', 'facefood-integration'),
+            'default_tab' => 'signup',
+            'auto_show' => true,
+            'delay_seconds' => 3,
+            'show_once' => true,
+            'show_trigger_button' => true,
+            'trigger_text' => __('Sign up', 'facefood-integration'),
+        ]);
+
+        ob_start();
+        include FACEFOOD_PLUGIN_DIR . 'public/auth-popup.php';
+
+        return (string) ob_get_clean();
     }
 
     public function ajax_login(): void
