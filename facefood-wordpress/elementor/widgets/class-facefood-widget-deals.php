@@ -32,10 +32,20 @@ class Facefood_Widget_Deals extends Facefood_Elementor_Widget_Base
 
         echo '<div class="facefood-deals">';
 
+        if (is_wp_error($deals)) {
+            echo '<p class="facefood-empty">' . esc_html(Facefood_Security::sanitize_api_message($deals->get_error_message())) . '</p>';
+            echo '</div>';
+
+            return;
+        }
+
         if (empty($deals)) {
             echo '<p class="facefood-empty">' . esc_html__('No active deals.', 'facefood-integration') . '</p>';
         } else {
             foreach ($deals as $deal) {
+                if (! is_array($deal)) {
+                    continue;
+                }
                 $title = esc_html($deal['title'] ?? '');
                 $price = esc_html($this->format_price((float) ($deal['deal_price'] ?? 0)));
                 $original = isset($deal['original_price']) ? esc_html($this->format_price((float) $deal['original_price'])) : '';
@@ -48,7 +58,7 @@ class Facefood_Widget_Deals extends Facefood_Elementor_Widget_Base
                 }
                 echo '<div class="facefood-deal__body">';
                 echo '<h3>' . $title . '</h3>';
-                echo '<p>' . esc_html($deal['description'] ?? '') . '</p>';
+                echo '<p>' . esc_html(wp_strip_all_tags($deal['description'] ?? '')) . '</p>';
                 echo '<div class="facefood-deal__prices">';
                 echo '<strong>' . $price . '</strong>';
                 if ($original) {

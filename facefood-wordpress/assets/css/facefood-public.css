@@ -142,6 +142,113 @@
   color: #666;
 }
 
+.facefood-toppings {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(13, 71, 161, 0.12);
+}
+
+.facefood-toppings__label {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0d47a1;
+}
+
+.facefood-toppings__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.facefood-toppings__item label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.facefood-toppings__name {
+  flex: 1;
+}
+
+.facefood-toppings__price {
+  color: #0d47a1;
+  font-weight: 600;
+}
+
+.facefood-toppings__total {
+  margin-top: 10px;
+  font-size: 0.95rem;
+}
+
+.facefood-auth {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(13, 71, 161, 0.08);
+}
+
+.facefood-auth h2 {
+  margin-top: 0;
+}
+
+.facefood-auth__note {
+  color: #5c677d;
+  font-size: 0.92rem;
+}
+
+.facefood-auth-form label {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.facefood-auth-form label span {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.facefood-auth-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cfd8dc;
+  border-radius: 10px;
+}
+
+.facefood-auth__message {
+  min-height: 1.2em;
+  margin-top: 10px;
+}
+
+.facefood-auth__message.is-error {
+  color: #b71c1c;
+}
+
+.facefood-auth__message.is-success {
+  color: #1b5e20;
+}
+
+.facefood-auth .facefood-btn--primary {
+  width: 100%;
+  background: #0d47a1;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.facefood-auth--account .facefood-btn--secondary {
+  background: #0d47a1;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .facefood-menu-grid {
     grid-template-columns: 1fr;

@@ -73,9 +73,9 @@ class Facefood_Sync
 
         $catalog = $this->api->get_catalog();
         if (is_wp_error($catalog)) {
-            $this->log('pull', 'error', $catalog->get_error_message());
+            $this->log('pull', 'error', Facefood_Security::sanitize_api_message($catalog->get_error_message()));
 
-            return ['success' => false, 'message' => $catalog->get_error_message()];
+            return ['success' => false, 'message' => Facefood_Security::sanitize_api_message($catalog->get_error_message())];
         }
 
         $data = $catalog['data'] ?? [];
@@ -126,9 +126,9 @@ class Facefood_Sync
             ]);
 
             if (is_wp_error($response)) {
-                $this->log('push', 'error', $response->get_error_message(), $item);
+                $this->log('push', 'error', Facefood_Security::sanitize_api_message($response->get_error_message()), $item);
 
-                return ['success' => false, 'message' => $response->get_error_message()];
+                return ['success' => false, 'message' => Facefood_Security::sanitize_api_message($response->get_error_message())];
             }
 
             $count++;

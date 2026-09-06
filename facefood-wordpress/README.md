@@ -44,10 +44,29 @@ After activation, find these widgets under the **Facefood** category in Elemento
 
 | Widget | Description |
 |--------|-------------|
-| Facefood Menu Grid | Product cards from API |
-| Facefood Category Menu | Tabbed menu by category |
+| Facefood Menu Grid | Product cards with optional extra toppings |
+| Facefood Category Menu | Tabbed menu by category with toppings |
 | Facefood Deals | Active deals carousel/grid |
 | Facefood App Download | Play Store / App Store buttons |
+| Facefood Login / Register | Shared Laravel account login & signup |
+
+## Shortcodes (login / register)
+
+| Shortcode | Description |
+|-----------|-------------|
+| `[facefood_login]` | Login form (same Laravel DB as mobile app) |
+| `[facefood_register]` | Create account |
+| `[facefood_account]` | Account panel when logged in, login form when not |
+
+One account works on **WordPress**, **WooCommerce**, and the **Flutter app**.
+
+## Security
+
+- All output escaped (`esc_html`, `esc_attr`, `esc_url`, `wp_kses_post`)
+- AJAX protected with WordPress nonces
+- Login/register rate limiting by IP
+- API errors sanitized — no server file paths shown to visitors
+- Laravel API returns safe JSON errors (no stack traces in production)
 
 ## API sync endpoints
 

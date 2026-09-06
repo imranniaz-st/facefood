@@ -41,46 +41,39 @@ class Facefood_Widget_Menu_Grid extends Facefood_Elementor_Widget_Base
             'min' => 1,
             'max' => 6,
         ]);
+        $this->add_control('show_toppings', [
+            'label' => esc_html__('Show extra toppings', 'facefood-integration'),
+            'type' => \Elementor\Controls_Manager::SWITCHER,
+            'default' => 'yes',
+            'label_on' => esc_html__('Yes', 'facefood-integration'),
+            'label_off' => esc_html__('No', 'facefood-integration'),
+        ]);
         $this->end_controls_section();
     }
 
     protected function render(): void
     {
         $settings = $this->get_settings_for_display();
-        $query = ! empty($settings['category_slug']) ? '?category=' . rawurlencode($settings['category_slug']) : '';
+        $query = ! empty($settings['category_slug']) ? '?category=' . rawurlencode(sanitize_title($settings['category_slug'])) : '';
         $products = $this->fetch_api('/products' . $query);
         $columns = max(1, (int) ($settings['columns'] ?? 3));
+        $showToppings = ($settings['show_toppings'] ?? 'yes') === 'yes';
 
         echo '<div class="facefood-menu-grid" style="--facefood-cols:' . esc_attr((string) $columns) . '">';
 
-        if (empty($products)) {
-            echo '<p class="facefood-empty">' . esc_html__('No menu items found. Run Facefood Sync first.', 'facefood-integration') . '</p>';
+        if (empty($products) || is_wp_error($products)) {
+            $message = is_wp_error($products)
+                ? Facefood_Security::sanitize_api_message($products->get_error_message())
+                : __('No menu items found. Run Facefood Sync first.', 'facefood-integration');
+            echo '<p class="facefood-empty">' . esc_html($message) . '</p>';
         } else {
             foreach ($products as $product) {
-                $this->render_card($product);
+                if (is_array($product)) {
+                    Facefood_Render::product_card($product, $showToppings);
+                }
             }
         }
 
         echo '</div>';
-    }
-
-    private function render_card(array $product): void
-    {
-        $name = esc_html($product['name'] ?? '');
-        $price = $this->format_price((float) ($product['price'] ?? 0));
-        $image = esc_url($product['image_url'] ?? '');
-        $desc = esc_html(wp_trim_words($product['description'] ?? '', 12));
-
-        echo '<article class="facefood-card">';
-        if ($image) {
-            echo '<img class="facefood-card__image" src="' . $image . '" alt="' . $name . '" loading="lazy">';
-        }
-        echo '<div class="facefood-card__body">';
-        echo '<h3 class="facefood-card__title">' . $name . '</h3>';
-        if ($desc) {
-            echo '<p class="facefood-card__desc">' . $desc . '</p>';
-        }
-        echo '<div class="facefood-card__price">' . esc_html($price) . '</div>';
-        echo '</div></article>';
     }
 }
