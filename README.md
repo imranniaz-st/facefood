@@ -10,6 +10,7 @@ Tax, delivery fee, currency, ETA, meals, and deals are all **managed in Laravel*
 facefood/
 ├── backend/          # Laravel API (Breeze + Sanctum tokens)
 ├── facefood_app/     # Flutter client
+├── facefood-wordpress/  # WordPress plugin (WooCommerce + Elementor)
 └── README.md
 ```
 
@@ -120,6 +121,16 @@ flutter build apk --debug
 ```
 
 Debug APK: `facefood_app/build/app/outputs/flutter-apk/app-debug.apk`
+
+## WordPress + WooCommerce + Elementor
+
+Full plugin in `facefood-wordpress/` — syncs menu to WooCommerce and displays widgets in Elementor.
+
+1. Set `WORDPRESS_SYNC_KEY` in Laravel `.env`
+2. Upload plugin to WordPress → activate
+3. **Facefood → Sync → Import Menu to API** then **Sync Now**
+
+See [facefood-wordpress/README.md](facefood-wordpress/README.md).
 
 ### Android APK & Play Store
 

@@ -18,6 +18,7 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'category_id' => $this->category_id,
             'name' => $this->name,
+            'woocommerce_sku' => $this->woocommerce_sku,
             'description' => $this->description,
             'ingredients' => $this->ingredients,
             'price' => (float) $this->price,

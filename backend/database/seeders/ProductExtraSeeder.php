@@ -10,62 +10,49 @@ class ProductExtraSeeder extends Seeder
 {
     public function run(): void
     {
-        $burgerToppings = [
-            ['name' => 'Extra cheese', 'price' => 80],
-            ['name' => 'Cheddar slice', 'price' => 60],
-            ['name' => 'Extra patty', 'price' => 220],
-            ['name' => 'Bacon', 'price' => 150],
-            ['name' => 'Fried egg', 'price' => 70],
-            ['name' => 'Jalapeños', 'price' => 40],
-            ['name' => 'Onion rings', 'price' => 90],
-            ['name' => 'Extra mayo', 'price' => 25],
-            ['name' => 'Garlic sauce', 'price' => 35],
-            ['name' => 'BBQ sauce', 'price' => 30],
-            ['name' => 'Chipotle sauce', 'price' => 45],
-            ['name' => 'Pickles', 'price' => 20],
+        $globalExtras = [
+            ['name' => 'Extra Topping', 'price' => 150],
+            ['name' => 'Extra Dip of Sauce', 'price' => 50],
+            ['name' => 'Chicken Items W/O Salad', 'price' => 50],
         ];
 
-        $pizzaToppings = [
-            ['name' => 'Extra mozzarella', 'price' => 120],
-            ['name' => 'Olives', 'price' => 80],
-            ['name' => 'Mushrooms', 'price' => 70],
-            ['name' => 'Pepperoni', 'price' => 150],
-            ['name' => 'Jalapeños', 'price' => 50],
-        ];
-
-        $shawarmaToppings = [
-            ['name' => 'Extra garlic sauce', 'price' => 40],
-            ['name' => 'Extra meat', 'price' => 180],
-            ['name' => 'Cheese', 'price' => 70],
-            ['name' => 'Fries inside', 'price' => 60],
-        ];
-
-        $broastToppings = [
-            ['name' => 'Spicy dip', 'price' => 40],
-            ['name' => 'Garlic mayo', 'price' => 35],
-            ['name' => 'Extra piece', 'price' => 280],
-        ];
-
-        $kidsToppings = [
-            ['name' => 'Extra ketchup', 'price' => 15],
-            ['name' => 'Extra fries', 'price' => 80],
-        ];
-
-        $byCategory = [
-            'burgers' => $burgerToppings,
-            'pizza' => $pizzaToppings,
-            'shawarmas' => $shawarmaToppings,
-            'broast' => $broastToppings,
-            'kids-meal' => $kidsToppings,
+        $sizeExtras = [
+            'Crispy Fries' => [
+                ['name' => 'Large', 'price' => 200],
+            ],
+            'Garlic Mayo Fries' => [
+                ['name' => 'Large', 'price' => 150],
+            ],
+            'Pizza Fries' => [
+                ['name' => 'Medium', 'price' => 250],
+                ['name' => 'Large', 'price' => 650],
+            ],
+            'Loaded Fries' => [
+                ['name' => 'Medium', 'price' => 300],
+                ['name' => 'Large', 'price' => 600],
+            ],
+            'Crunchy Strips + Fries' => [
+                ['name' => '12 Pcs', 'price' => 450],
+                ['name' => '1 KG', 'price' => 1550],
+            ],
+            'Nuggets + Fries' => [
+                ['name' => '1 KG', 'price' => 350],
+            ],
+            'Shawarma Grilled Chicken' => [
+                ['name' => '1 KG', 'price' => 900],
+            ],
         ];
 
         $products = Product::query()->with('category')->get();
 
         foreach ($products as $product) {
-            $slug = $product->category?->slug;
-            $extras = $byCategory[$slug] ?? [];
-            if ($extras === []) {
+            if ($product->category?->slug === 'extras') {
                 continue;
+            }
+
+            $extras = $sizeExtras[$product->name] ?? [];
+            if ($product->category?->slug !== 'extras') {
+                $extras = array_merge($extras, $globalExtras);
             }
 
             foreach ($extras as $index => $extra) {

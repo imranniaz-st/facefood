@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'wordpress' => [
+        'sync_key' => env('WORDPRESS_SYNC_KEY'),
+        'site_url' => env('WORDPRESS_SITE_URL'),
+    ],
+
 ];

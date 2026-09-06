@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\WordPressSyncController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
@@ -24,6 +25,13 @@ Route::get('/deals', [DealController::class, 'index']);
 Route::get('/deals/{deal}', [DealController::class, 'show']);
 
 Route::post('/orders/quote', [OrderController::class, 'quote']);
+
+Route::middleware('wordpress.sync')->prefix('wordpress')->group(function () {
+    Route::get('/catalog', [WordPressSyncController::class, 'catalog']);
+    Route::post('/link', [WordPressSyncController::class, 'link']);
+    Route::post('/bulk-link', [WordPressSyncController::class, 'bulkLink']);
+    Route::post('/products/upsert', [WordPressSyncController::class, 'upsertProduct']);
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [ProfileController::class, 'show']);

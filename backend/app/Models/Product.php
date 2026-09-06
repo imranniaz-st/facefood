@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'extras',
     'is_popular',
     'is_available',
+    'wordpress_product_id',
+    'woocommerce_sku',
+    'synced_at',
 ])]
 class Product extends Model
 {
@@ -36,6 +39,7 @@ class Product extends Model
             'extras' => 'array',
             'is_popular' => 'boolean',
             'is_available' => 'boolean',
+            'synced_at' => 'datetime',
         ];
     }
 

@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'starts_at',
     'ends_at',
     'is_active',
+    'wordpress_post_id',
+    'synced_at',
 ])]
 class Deal extends Model
 {
@@ -29,6 +31,7 @@ class Deal extends Model
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
             'is_active' => 'boolean',
+            'synced_at' => 'datetime',
         ];
     }
 
