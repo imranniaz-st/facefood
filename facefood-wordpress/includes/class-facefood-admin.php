@@ -50,6 +50,8 @@ class Facefood_Admin
         register_setting('facefood_settings', 'facefood_app_store_url', ['sanitize_callback' => 'esc_url_raw']);
         register_setting('facefood_settings', 'facefood_app_play_url', ['sanitize_callback' => 'esc_url_raw']);
         register_setting('facefood_settings', 'facefood_auto_sync', ['sanitize_callback' => 'sanitize_text_field']);
+        register_setting('facefood_settings', 'facefood_shop_url', ['sanitize_callback' => 'esc_url_raw']);
+        register_setting('facefood_settings', 'facefood_order_url', ['sanitize_callback' => 'esc_url_raw']);
     }
 
     public function render_settings_page(): void

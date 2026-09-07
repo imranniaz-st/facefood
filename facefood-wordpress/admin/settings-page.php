@@ -50,6 +50,21 @@ $lastSync = get_option('facefood_last_sync_at', '');
                            value="<?php echo esc_attr(get_option('facefood_app_store_url', '')); ?>">
                 </td>
             </tr>
+            <tr>
+                <th scope="row"><label for="facefood_shop_url">Shop page URL (fallback)</label></th>
+                <td>
+                    <input type="url" class="regular-text" id="facefood_shop_url" name="facefood_shop_url"
+                           value="<?php echo esc_attr(get_option('facefood_shop_url', function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : '')); ?>">
+                    <p class="description">Used when a product link cannot be resolved. Usually your WooCommerce shop page.</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="facefood_order_url">Checkout URL (fallback)</label></th>
+                <td>
+                    <input type="url" class="regular-text" id="facefood_order_url" name="facefood_order_url"
+                           value="<?php echo esc_attr(get_option('facefood_order_url', function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : '')); ?>">
+                </td>
+            </tr>
         </table>
         <?php submit_button('Save Settings'); ?>
     </form>
@@ -57,4 +72,13 @@ $lastSync = get_option('facefood_last_sync_at', '');
     <?php if ($lastSync) : ?>
         <p><strong>Last sync:</strong> <?php echo esc_html($lastSync); ?></p>
     <?php endif; ?>
+
+    <hr>
+    <h2>Link checklist</h2>
+    <ul style="list-style:disc;padding-left:20px;">
+        <li>API URL must be <code>https://app.facefood.cafe/api</code> (with <code>/api</code>)</li>
+        <li>Run <strong>Facefood → Sync → Sync Now</strong> so products link to WooCommerce</li>
+        <li>WooCommerce → Settings → Products → Shop page must be set</li>
+        <li>Use Elementor widget <strong>Facefood WooCommerce Products</strong> if API menu is empty</li>
+    </ul>
 </div>

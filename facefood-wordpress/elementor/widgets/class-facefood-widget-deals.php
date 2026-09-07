@@ -46,6 +46,10 @@ class Facefood_Widget_Deals extends Facefood_Elementor_Widget_Base
                 if (! is_array($deal)) {
                     continue;
                 }
+
+                $productId = (int) ($deal['product_id'] ?? 0);
+                $productUrl = Facefood_Links::product_url($productId);
+                $cartUrl = Facefood_Links::add_to_cart_url($productId);
                 $title = esc_html($deal['title'] ?? '');
                 $price = esc_html($this->format_price((float) ($deal['deal_price'] ?? 0)));
                 $original = isset($deal['original_price']) ? esc_html($this->format_price((float) $deal['original_price'])) : '';
@@ -53,18 +57,45 @@ class Facefood_Widget_Deals extends Facefood_Elementor_Widget_Base
                 $image = esc_url($deal['image_url'] ?? '');
 
                 echo '<article class="facefood-deal" style="--facefood-deal-color:' . $color . '">';
-                if ($image) {
+
+                if ($image && $productUrl) {
+                    echo '<a href="' . esc_url($productUrl) . '">';
+                    echo '<img class="facefood-deal__image" src="' . $image . '" alt="' . $title . '" loading="lazy">';
+                    echo '</a>';
+                } elseif ($image) {
                     echo '<img class="facefood-deal__image" src="' . $image . '" alt="' . $title . '" loading="lazy">';
                 }
+
                 echo '<div class="facefood-deal__body">';
-                echo '<h3>' . $title . '</h3>';
+                echo '<h3>';
+                if ($productUrl) {
+                    echo '<a href="' . esc_url($productUrl) . '">' . $title . '</a>';
+                } else {
+                    echo $title;
+                }
+                echo '</h3>';
                 echo '<p>' . esc_html(wp_strip_all_tags($deal['description'] ?? '')) . '</p>';
                 echo '<div class="facefood-deal__prices">';
                 echo '<strong>' . $price . '</strong>';
                 if ($original) {
                     echo '<del>' . $original . '</del>';
                 }
-                echo '</div></div></article>';
+                echo '</div>';
+
+                if ($productUrl) {
+                    echo '<div class="facefood-card__actions">';
+                    echo '<a class="facefood-btn facefood-btn--outline" href="' . esc_url($productUrl) . '">';
+                    echo esc_html__('View deal', 'facefood-integration');
+                    echo '</a>';
+                    if ($cartUrl) {
+                        echo '<a class="facefood-btn facefood-btn--primary" href="' . esc_url($cartUrl) . '">';
+                        echo esc_html__('Order now', 'facefood-integration');
+                        echo '</a>';
+                    }
+                    echo '</div>';
+                }
+
+                echo '</div></article>';
             }
         }
 

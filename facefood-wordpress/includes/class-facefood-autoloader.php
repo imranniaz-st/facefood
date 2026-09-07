@@ -22,6 +22,7 @@ class Facefood_Autoloader
                 'Facefood_Sync' => 'class-facefood-sync.php',
                 'Facefood_WooCommerce' => 'class-facefood-woocommerce.php',
                 'Facefood_Menu_Data' => 'class-facefood-menu-data.php',
+                'Facefood_Links' => 'class-facefood-links.php',
                 'Facefood_Security' => 'class-facefood-security.php',
                 'Facefood_Render' => 'class-facefood-render.php',
                 'Facefood_Auth' => 'class-facefood-auth.php',
@@ -33,6 +34,7 @@ class Facefood_Autoloader
                 'Facefood_Widget_App_Button' => '../elementor/widgets/class-facefood-widget-app-button.php',
                 'Facefood_Widget_Auth' => '../elementor/widgets/class-facefood-widget-auth.php',
                 'Facefood_Widget_Auth_Popup' => '../elementor/widgets/class-facefood-widget-auth-popup.php',
+                'Facefood_Widget_Woo_Products' => '../elementor/widgets/class-facefood-widget-woo-products.php',
             ];
 
             if (! isset($map[$class])) {

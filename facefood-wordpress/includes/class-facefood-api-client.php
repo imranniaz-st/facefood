@@ -12,7 +12,9 @@ class Facefood_Api_Client
 
     public function __construct()
     {
-        $this->baseUrl = rtrim((string) get_option('facefood_api_base_url', 'https://app.facefood.cafe/api'), '/');
+        $this->baseUrl = Facefood_Links::normalize_api_base_url(
+            (string) get_option('facefood_api_base_url', 'https://app.facefood.cafe/api')
+        );
         $this->syncKey = (string) get_option('facefood_sync_key', '');
     }
 
@@ -72,13 +74,18 @@ class Facefood_Api_Client
 
     public function get_public(string $path): array|WP_Error
     {
+        $path = '/' . ltrim($path, '/');
         $result = $this->request('GET', $path, null, false, false);
 
         if (is_wp_error($result)) {
             return $result;
         }
 
-        return $result['data'] ?? $result;
+        if (isset($result['data']) && is_array($result['data'])) {
+            return $result['data'];
+        }
+
+        return is_array($result) ? $result : [];
     }
 
     private function request(string $method, string $path, ?array $body = null, bool $useSyncKey = true, bool $useBearer = false): array|WP_Error

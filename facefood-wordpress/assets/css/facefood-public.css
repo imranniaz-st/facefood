@@ -142,6 +142,52 @@
   color: #666;
 }
 
+.facefood-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.facefood-card__title a:hover {
+  color: #0d47a1;
+}
+
+.facefood-card__image-link {
+  display: block;
+}
+
+.facefood-card__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.facefood-btn--outline {
+  background: #fff;
+  color: #0d47a1;
+  border: 1px solid #0d47a1;
+  text-decoration: none;
+  text-align: center;
+}
+
+.facefood-card__actions .facefood-btn--primary {
+  background: #0d47a1;
+  color: #fff;
+  border: none;
+  text-decoration: none;
+  flex: 1;
+  text-align: center;
+}
+
+.facefood-deal h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.facefood-deal h3 a:hover {
+  color: #0d47a1;
+}
+
 .facefood-toppings {
   margin-top: 14px;
   padding-top: 12px;

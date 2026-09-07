@@ -63,10 +63,13 @@ class Facefood_Plugin
         );
 
         wp_localize_script('facefood-public', 'facefoodPublic', [
-            'apiBase' => esc_url_raw(get_option('facefood_api_base_url', 'https://app.facefood.cafe/api')),
+            'apiBase' => esc_url_raw(Facefood_Links::normalize_api_base_url(
+                (string) get_option('facefood_api_base_url', 'https://app.facefood.cafe/api')
+            )),
             'currency' => 'Rs.',
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('facefood_public_nonce'),
+            'shopUrl' => esc_url_raw(Facefood_Links::shop_url()),
         ]);
     }
 }
