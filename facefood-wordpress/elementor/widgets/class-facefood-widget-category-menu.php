@@ -41,67 +41,69 @@ class Facefood_Widget_Category_Menu extends Facefood_Elementor_Widget_Base
 
     protected function render(): void
     {
-        $settings = $this->get_settings_for_display();
-        $showToppings = ($settings['show_toppings'] ?? 'yes') === 'yes';
-        $categories = $this->fetch_api('/categories');
-        $products = $this->fetch_api('/products');
+        $this->render_if_logged_in_or_gate(function (): void {
+            $settings = $this->get_settings_for_display();
+            $showToppings = ($settings['show_toppings'] ?? 'yes') === 'yes';
+            $categories = $this->fetch_api('/categories');
+            $products = $this->fetch_api('/products');
 
-        if (is_wp_error($categories) || is_wp_error($products)) {
-            $message = is_wp_error($categories)
-                ? $categories->get_error_message()
-                : $products->get_error_message();
-            echo '<p class="facefood-empty">' . esc_html(Facefood_Security::sanitize_api_message($message)) . '</p>';
+            if (is_wp_error($categories) || is_wp_error($products)) {
+                $message = is_wp_error($categories)
+                    ? $categories->get_error_message()
+                    : $products->get_error_message();
+                echo '<p class="facefood-empty">' . esc_html(Facefood_Security::sanitize_api_message($message)) . '</p>';
 
-            return;
-        }
-
-        $byCategory = [];
-        foreach ($products as $product) {
-            if (! is_array($product)) {
-                continue;
+                return;
             }
-            $slug = $product['category']['slug'] ?? 'other';
-            $byCategory[$slug][] = $product;
-        }
 
-        echo '<div class="facefood-category-menu">';
+            $byCategory = [];
+            foreach ($products as $product) {
+                if (! is_array($product)) {
+                    continue;
+                }
+                $slug = $product['category']['slug'] ?? 'other';
+                $byCategory[$slug][] = $product;
+            }
 
-        if (empty($categories)) {
-            echo '<p class="facefood-empty">' . esc_html__('No categories found.', 'facefood-integration') . '</p>';
+            echo '<div class="facefood-category-menu">';
+
+            if (empty($categories)) {
+                echo '<p class="facefood-empty">' . esc_html__('No categories found.', 'facefood-integration') . '</p>';
+                echo '</div>';
+
+                return;
+            }
+
+            echo '<div class="facefood-tabs">';
+            foreach ($categories as $index => $category) {
+                if (! is_array($category)) {
+                    continue;
+                }
+                $slug = sanitize_title($category['slug'] ?? '');
+                $active = $index === 0 ? ' is-active' : '';
+                echo '<button type="button" class="facefood-tab' . esc_attr($active) . '" data-target="ff-cat-' . esc_attr($slug) . '">';
+                echo esc_html($category['name'] ?? $slug);
+                echo '</button>';
+            }
             echo '</div>';
 
-            return;
-        }
+            foreach ($categories as $index => $category) {
+                if (! is_array($category)) {
+                    continue;
+                }
+                $slug = sanitize_title($category['slug'] ?? '');
+                $active = $index === 0 ? ' is-active' : '';
+                echo '<div id="ff-cat-' . esc_attr($slug) . '" class="facefood-tab-panel' . esc_attr($active) . '">';
+                echo '<div class="facefood-menu-grid" style="--facefood-cols:3">';
 
-        echo '<div class="facefood-tabs">';
-        foreach ($categories as $index => $category) {
-            if (! is_array($category)) {
-                continue;
-            }
-            $slug = sanitize_title($category['slug'] ?? '');
-            $active = $index === 0 ? ' is-active' : '';
-            echo '<button type="button" class="facefood-tab' . esc_attr($active) . '" data-target="ff-cat-' . esc_attr($slug) . '">';
-            echo esc_html($category['name'] ?? $slug);
-            echo '</button>';
-        }
-        echo '</div>';
+                foreach ($byCategory[$slug] ?? [] as $product) {
+                    Facefood_Render::product_card($product, $showToppings);
+                }
 
-        foreach ($categories as $index => $category) {
-            if (! is_array($category)) {
-                continue;
-            }
-            $slug = sanitize_title($category['slug'] ?? '');
-            $active = $index === 0 ? ' is-active' : '';
-            echo '<div id="ff-cat-' . esc_attr($slug) . '" class="facefood-tab-panel' . esc_attr($active) . '">';
-            echo '<div class="facefood-menu-grid" style="--facefood-cols:3">';
-
-            foreach ($byCategory[$slug] ?? [] as $product) {
-                Facefood_Render::product_card($product, $showToppings);
+                echo '</div></div>';
             }
 
-            echo '</div></div>';
-        }
-
-        echo '</div>';
+            echo '</div>';
+        });
     }
 }

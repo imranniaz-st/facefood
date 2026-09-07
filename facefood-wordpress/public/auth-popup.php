@@ -9,6 +9,7 @@ $headline = esc_html($popup_settings['headline'] ?? __('Join Facefood', 'facefoo
 $subtitle = esc_html($popup_settings['subtitle'] ?? __('Create an account to order faster, save favourites, and get exclusive deals.', 'facefood-integration'));
 $default_tab = ($popup_settings['default_tab'] ?? 'signup') === 'login' ? 'login' : 'signup';
 $auto_show = ! empty($popup_settings['auto_show']) ? '1' : '0';
+$force_open = ! empty($popup_settings['force_open']) ? '1' : '0';
 $delay = max(0, (int) ($popup_settings['delay_seconds'] ?? 3));
 $show_once = ! empty($popup_settings['show_once']) ? '1' : '0';
 $show_trigger = ! empty($popup_settings['show_trigger_button']);
@@ -24,6 +25,7 @@ $trigger_text = esc_html($popup_settings['trigger_text'] ?? __('Sign up', 'facef
     class="facefood-popup"
     id="<?php echo $popup_id; ?>"
     data-auto-show="<?php echo esc_attr($auto_show); ?>"
+    data-force-open="<?php echo esc_attr($force_open); ?>"
     data-delay="<?php echo esc_attr((string) $delay); ?>"
     data-show-once="<?php echo esc_attr($show_once); ?>"
     data-default-tab="<?php echo esc_attr($default_tab); ?>"

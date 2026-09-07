@@ -65,6 +65,15 @@ $lastSync = get_option('facefood_last_sync_at', '');
                            value="<?php echo esc_attr(get_option('facefood_order_url', function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : '')); ?>">
                 </td>
             </tr>
+            <tr>
+                <th scope="row"><label for="facefood_require_login_for_products">Require login for menu</label></th>
+                <td>
+                    <select id="facefood_require_login_for_products" name="facefood_require_login_for_products">
+                        <option value="yes" <?php selected(get_option('facefood_require_login_for_products', 'yes'), 'yes'); ?>>Yes — show login/signup before products</option>
+                        <option value="no" <?php selected(get_option('facefood_require_login_for_products', 'yes'), 'no'); ?>>No — show products to everyone</option>
+                    </select>
+                </td>
+            </tr>
         </table>
         <?php submit_button('Save Settings'); ?>
     </form>

@@ -26,4 +26,15 @@ abstract class Facefood_Elementor_Widget_Base extends \Elementor\Widget_Base
     {
         return Facefood_Render::format_price($amount);
     }
+
+    protected function render_if_logged_in_or_gate(callable $renderContent): void
+    {
+        if (Facefood_Auth::should_show_product_gate()) {
+            echo Facefood_Auth::render_product_gate('facefood-elementor-gate-' . $this->get_id());
+
+            return;
+        }
+
+        $renderContent();
+    }
 }

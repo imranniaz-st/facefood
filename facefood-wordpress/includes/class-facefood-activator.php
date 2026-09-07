@@ -61,5 +61,6 @@ class Facefood_Activator
         add_option('facefood_auto_sync', 'yes');
         add_option('facefood_last_sync_at', '');
         add_option('facefood_db_version', '1.0.0');
+        add_option('facefood_require_login_for_products', 'yes');
     }
 }

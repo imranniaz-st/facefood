@@ -474,6 +474,65 @@ body.facefood-popup-open {
   overflow: hidden;
 }
 
+.facefood-product-gate-wrap {
+  margin: 0 auto;
+  max-width: 520px;
+}
+
+.facefood-product-gate {
+  text-align: center;
+  padding: 36px 28px;
+  border-radius: 24px;
+  background: linear-gradient(160deg, #ffffff 0%, #f0f7ff 100%);
+  border: 1px solid rgba(13, 71, 161, 0.12);
+  box-shadow: 0 16px 40px rgba(13, 71, 161, 0.12);
+}
+
+.facefood-product-gate__icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.facefood-product-gate h2 {
+  margin: 0 0 10px;
+  color: #0d1b2a;
+}
+
+.facefood-product-gate p {
+  margin: 0 0 18px;
+  color: #5c677d;
+  line-height: 1.5;
+}
+
+.facefood-product-gate__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.facefood-product-gate__actions .facefood-btn {
+  min-width: 140px;
+  cursor: pointer;
+}
+
+.facefood-product-gate__note {
+  margin: 14px 0 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+body.facefood-wc-gated.single-product .product,
+body.facefood-wc-gated.post-type-archive-product .products,
+body.facefood-wc-gated.tax-product_cat .products,
+body.facefood-wc-gated.tax-product_tag .products {
+  display: none !important;
+}
+
+body.facefood-wc-gated .facefood-product-gate-wrap {
+  margin: 24px auto 40px;
+}
+
 @media (max-width: 768px) {
   .facefood-menu-grid {
     grid-template-columns: 1fr;

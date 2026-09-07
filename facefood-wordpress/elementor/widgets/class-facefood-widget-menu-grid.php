@@ -53,27 +53,29 @@ class Facefood_Widget_Menu_Grid extends Facefood_Elementor_Widget_Base
 
     protected function render(): void
     {
-        $settings = $this->get_settings_for_display();
-        $query = ! empty($settings['category_slug']) ? '?category=' . rawurlencode(sanitize_title($settings['category_slug'])) : '';
-        $products = $this->fetch_api('/products' . $query);
-        $columns = max(1, (int) ($settings['columns'] ?? 3));
-        $showToppings = ($settings['show_toppings'] ?? 'yes') === 'yes';
+        $this->render_if_logged_in_or_gate(function (): void {
+            $settings = $this->get_settings_for_display();
+            $query = ! empty($settings['category_slug']) ? '?category=' . rawurlencode(sanitize_title($settings['category_slug'])) : '';
+            $products = $this->fetch_api('/products' . $query);
+            $columns = max(1, (int) ($settings['columns'] ?? 3));
+            $showToppings = ($settings['show_toppings'] ?? 'yes') === 'yes';
 
-        echo '<div class="facefood-menu-grid" style="--facefood-cols:' . esc_attr((string) $columns) . '">';
+            echo '<div class="facefood-menu-grid" style="--facefood-cols:' . esc_attr((string) $columns) . '">';
 
-        if (empty($products) || is_wp_error($products)) {
-            $message = is_wp_error($products)
-                ? Facefood_Security::sanitize_api_message($products->get_error_message())
-                : __('No menu items found. Run Facefood Sync first.', 'facefood-integration');
-            echo '<p class="facefood-empty">' . esc_html($message) . '</p>';
-        } else {
-            foreach ($products as $product) {
-                if (is_array($product)) {
-                    Facefood_Render::product_card($product, $showToppings);
+            if (empty($products) || is_wp_error($products)) {
+                $message = is_wp_error($products)
+                    ? Facefood_Security::sanitize_api_message($products->get_error_message())
+                    : __('No menu items found. Run Facefood Sync first.', 'facefood-integration');
+                echo '<p class="facefood-empty">' . esc_html($message) . '</p>';
+            } else {
+                foreach ($products as $product) {
+                    if (is_array($product)) {
+                        Facefood_Render::product_card($product, $showToppings);
+                    }
                 }
             }
-        }
 
-        echo '</div>';
+            echo '</div>';
+        });
     }
 }

@@ -107,9 +107,8 @@ class Facefood_Widget_Auth_Popup extends \Elementor\Widget_Base
         }
 
         $settings = $this->get_settings_for_display();
-        $auth = new Facefood_Auth();
 
-        echo $auth->render_auth_popup([
+        echo Facefood_Auth::render_auth_popup([
             'id' => 'facefood-auth-popup-' . $this->get_id(),
             'headline' => sanitize_text_field($settings['headline'] ?? ''),
             'subtitle' => sanitize_text_field($settings['subtitle'] ?? ''),

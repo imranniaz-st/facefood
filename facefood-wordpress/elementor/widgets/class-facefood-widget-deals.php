@@ -28,9 +28,10 @@ class Facefood_Widget_Deals extends Facefood_Elementor_Widget_Base
 
     protected function render(): void
     {
-        $deals = $this->fetch_api('/deals');
+        $this->render_if_logged_in_or_gate(function (): void {
+            $deals = $this->fetch_api('/deals');
 
-        echo '<div class="facefood-deals">';
+            echo '<div class="facefood-deals">';
 
         if (is_wp_error($deals)) {
             echo '<p class="facefood-empty">' . esc_html(Facefood_Security::sanitize_api_message($deals->get_error_message())) . '</p>';
@@ -100,5 +101,6 @@ class Facefood_Widget_Deals extends Facefood_Elementor_Widget_Base
         }
 
         echo '</div>';
+        });
     }
 }

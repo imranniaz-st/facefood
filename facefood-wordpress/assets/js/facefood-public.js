@@ -25,11 +25,17 @@
   function initAuthPopups() {
     $('.facefood-popup').each(function () {
       var $popup = $(this);
+      var forceOpen = $popup.data('force-open') === 1 || $popup.data('force-open') === '1';
       var autoShow = $popup.data('auto-show') === 1 || $popup.data('auto-show') === '1';
       var delay = parseInt($popup.data('delay'), 10) || 0;
       var showOnce = $popup.data('show-once') === 1 || $popup.data('show-once') === '1';
       var popupId = $popup.attr('id') || 'facefood-popup';
       var storageKey = 'facefood_popup_seen_' + popupId;
+
+      if (forceOpen) {
+        openPopup($popup);
+        return;
+      }
 
       if (showOnce && window.sessionStorage.getItem(storageKey) === '1') {
         return;
@@ -46,12 +52,23 @@
     });
   }
 
+  function switchPopupTab($popup, tab) {
+    $popup.find('.facefood-popup__tab').removeClass('is-active');
+    $popup.find('.facefood-popup__panel').removeClass('is-active');
+    $popup.find('.facefood-popup__tab[data-tab="' + tab + '"]').addClass('is-active');
+    $popup.find('.facefood-popup__panel[data-panel="' + tab + '"]').addClass('is-active');
+  }
+
   $(document).ready(initAuthPopups);
 
   $(document).on('click', '.facefood-popup-trigger', function () {
     var target = $(this).data('target');
+    var tab = $(this).data('open-tab');
     var $popup = $('#' + target);
     if ($popup.length) {
+      if (tab) {
+        switchPopupTab($popup, tab);
+      }
       openPopup($popup);
     }
   });

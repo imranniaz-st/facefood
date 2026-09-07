@@ -25,6 +25,89 @@ class Facefood_Auth
         add_action('wp_ajax_nopriv_facefood_logout', [$this, 'ajax_logout']);
 
         add_action('wp_logout', [$this, 'clear_session_meta']);
+        add_action('wp', [$this, 'maybe_gate_woocommerce_products']);
+        add_filter('body_class', [$this, 'add_body_class']);
+    }
+
+    public static function must_login_for_products(): bool
+    {
+        return get_option('facefood_require_login_for_products', 'yes') === 'yes';
+    }
+
+    public static function should_show_product_gate(): bool
+    {
+        return self::must_login_for_products() && ! is_user_logged_in();
+    }
+
+    public function add_body_class(array $classes): array
+    {
+        if ($this->is_gated_wc_page()) {
+            $classes[] = 'facefood-wc-gated';
+        }
+
+        return $classes;
+    }
+
+    public function maybe_gate_woocommerce_products(): void
+    {
+        if (! self::should_show_product_gate() || ! class_exists('WooCommerce')) {
+            return;
+        }
+
+        if (! $this->is_gated_wc_page()) {
+            return;
+        }
+
+        add_action('woocommerce_before_main_content', [$this, 'echo_product_gate'], 2);
+        add_action('woocommerce_before_single_product', [$this, 'echo_product_gate'], 2);
+    }
+
+    private function is_gated_wc_page(): bool
+    {
+        if (! self::should_show_product_gate()) {
+            return false;
+        }
+
+        return function_exists('is_shop') && (
+            is_shop()
+            || is_singular('product')
+            || is_product_taxonomy()
+        );
+    }
+
+    public function echo_product_gate(): void
+    {
+        static $shown = false;
+        if ($shown) {
+            return;
+        }
+        $shown = true;
+
+        echo self::render_product_gate('facefood-wc-gate-popup');
+    }
+
+    public static function render_product_gate(string $popupId = 'facefood-product-gate-popup'): string
+    {
+        if (! self::should_show_product_gate()) {
+            return '';
+        }
+
+        ob_start();
+        $popup_settings = ['popup_id' => $popupId];
+        include FACEFOOD_PLUGIN_DIR . 'public/product-login-gate.php';
+        echo self::render_auth_popup([
+            'id' => $popupId,
+            'headline' => __('Join Facefood', 'facefood-integration'),
+            'subtitle' => __('Create an account to browse our menu and place orders.', 'facefood-integration'),
+            'default_tab' => 'signup',
+            'auto_show' => true,
+            'delay_seconds' => 0,
+            'show_once' => false,
+            'show_trigger_button' => false,
+            'force_open' => true,
+        ]);
+
+        return (string) ob_get_clean();
     }
 
     public static function current_laravel_user(): ?array
@@ -105,7 +188,7 @@ class Facefood_Auth
             'trigger_text' => __('Sign up', 'facefood-integration'),
         ], $atts, 'facefood_auth_popup');
 
-        return $this->render_auth_popup([
+        return self::render_auth_popup([
             'id' => 'facefood-auth-popup-shortcode',
             'headline' => sanitize_text_field($atts['headline']),
             'subtitle' => sanitize_text_field($atts['subtitle']),
@@ -118,7 +201,7 @@ class Facefood_Auth
         ]);
     }
 
-    public function render_auth_popup(array $settings = []): string
+    public static function render_auth_popup(array $settings = []): string
     {
         if (is_user_logged_in()) {
             return '';
@@ -134,6 +217,7 @@ class Facefood_Auth
             'show_once' => true,
             'show_trigger_button' => true,
             'trigger_text' => __('Sign up', 'facefood-integration'),
+            'force_open' => false,
         ]);
 
         ob_start();
